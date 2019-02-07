@@ -1,5 +1,7 @@
+import { TrackService } from './../track.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Track } from '../track';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-wishlist',
@@ -7,48 +9,70 @@ import { Track } from '../track';
   styleUrls: ['./wishlist.component.scss']
 })
 export class WishlistComponent implements OnInit {
+  private tracks: Array<Track>;
+  private statusCode: number;
+  private errorStatus: string;
 
-  comments: string;
-  @Input()
-  track: Track;
-  @Input()
-  url: String;
-  @Input()
-  statusCode: number;
-  @Input()
-  watchListApi: boolean;
-  @Output()
-  addToWishList  = new EventEmitter();
-  status: boolean;
-  deleteFromWishlist: any;
-  dialog: any;
-  updateComments: any;
-  constructor() { }
+  constructor(private trackService: TrackService, private snackBar: MatSnackBar) {
+    this.tracks = [];
+  }
 
   ngOnInit() {
-    console.log('', this.track);
   }
-  onClickMe(track: Track) {
-    this.addToWishList.emit(track);
+
+  getTracks() {
+    this.trackService.getAllWishListTrack1().subscribe((res: any) => {
+      this.tracks = res;
+      console.log(this.tracks);
+      });
   }
-  deleteTrack(track: Track) {
-    console.log('track is 1234', track);
-    this.deleteFromWishlist.emit(track);
+
+  deleteTrack(trackId) {
+    this.trackService.deleteTrackFromWishList(trackId).subscribe(
+      response => {
+        // this.statusCode = response.status;
+        if (this.statusCode === 200) {
+          this.getTracks();
+          console.log('Success', this.statusCode);
+          this.snackBar.open('Track Successfully Deleted !!!', '', {
+            duration: 1500
+          });
+        }
+      },
+      err => {
+        const errorStatus = err;
+        this.statusCode = parseInt(errorStatus, 10);
+        if (this.statusCode === 404) {
+          this.snackBar.open('Track Doesn\'t Exist', '', {
+            duration: 1500
+          });
+          this.statusCode = 0;
+        }
+    });
   }
-  addComments(actionType): void {
-    console.log('in add comments');
-  //   const dialogRef = this.dialog.open(DialogComponent, {
-  //    width: '55vh',
-  //    height: '30vh',
-  //    data: { trackId : this.track.trackId , comments : this.track.comments }
-  //  });
-  //  dialogRef.afterClosed().subscribe(result => {
-  //    console.log('The dialog was closed' , result);
-  //    // this.comments = result;
-  //    this.track.comments = result;
-  //     this.updateComments.emit(this.track);
-  // // console.log('In Card comments' , result);
-  //  });
+
+  updateTrack(track) {
+    this.trackService.updateComments(track).subscribe(
+      response => {
+        this.statusCode = response.status;
+        if (this.statusCode === 200) {
+          this.getTracks();
+          console.log('Success', this.statusCode);
+          this.snackBar.open('Track Successfully Updated !!!', '', {
+            duration: 1500
+          });
+        }
+      },
+      err => {
+        const errorStatus = err;
+        this.statusCode = parseInt(errorStatus, 10);
+        if (this.statusCode === 404) {
+          this.snackBar.open('Track Doesn\'t Exist', '', {
+            duration: 1500
+          });
+          this.statusCode = 0;
+        }
+    });
   }
 }
 

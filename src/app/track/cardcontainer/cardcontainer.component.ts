@@ -42,8 +42,6 @@ export class CardcontainerComponent implements OnInit {
   }
 
   addToWishList(track) {
-    console.log('add wishlist', track);
-    // this.object = { trackName: 'qux', comments: 'kshadkjhskjkdsa'};
     this.TrackService.addTracktoWishList(track).subscribe(
       data => {
        console.log('data in ', data);
@@ -67,10 +65,5 @@ export class CardcontainerComponent implements OnInit {
         }
       }
     );
-  }
-  getAllWishlistTracks() {
-    this.TrackService.getAllWishListTrack1().subscribe(data => {
-      console.log(data);
-    });
   }
 }
