@@ -10,7 +10,7 @@ const routes: Routes = [
     data: { country: 'India'}
   },
   {
-    path: 'wishlist',
+    path: 'Wishlist',
     component: WishlistComponent
   }
 ];

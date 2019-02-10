@@ -19,44 +19,26 @@ export class CardComponent implements OnInit {
   statusCode: number;
   @Input()
   watchListApi: boolean;
+  status: boolean;
+  dialog: any;
   @Output()
   addToWishList  = new EventEmitter();
-  status: boolean;
-  deleteFromWishlist: any;
-  dialog: any;
-  updateComments: any;
-  @Output() trackAddEvent = new EventEmitter<Track>();
-  @Output() trackUpdateEvent = new EventEmitter<Track>();
-  @Output() trackDeleteEvent = new EventEmitter<String>();
+  @Output()
+  deleteFromWishlist = new EventEmitter<String>();
+  @Output()
+  updateComments = new EventEmitter();
 
-  private isHome: boolean;
-
-  @ViewChild('callAPIDialog') callAPIDialog: TemplateRef<any>;
-  @ViewChild('TrackComment') trackComment: ElementRef;
-  constructor() {
-    this.isHome = true;
-   }
-
+  constructor() { }
   ngOnInit() {
     console.log('', this.track);
   }
   onClickMe(track: Track) {
     this.addToWishList.emit(track);
   }
-   updateTrack() {
-    const dialogRef = this.dialog.open(this.callAPIDialog);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'yes') {
-        this.track.comments = this.trackComment.nativeElement.value;
-        this.trackUpdateEvent.emit(this.track);
-      }
-    });
+  deleteTrack(track: Track) {
+    console.log('track is 1234', track);
+    this.deleteFromWishlist.emit(track.trackId);
   }
-
-  deleteTrack() {
-    this.trackDeleteEvent.emit(this.track.trackId);
-  }
-
   playTrack() {
     console.log(this.track);
   }

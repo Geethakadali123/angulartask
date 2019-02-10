@@ -15,7 +15,7 @@
         class="deletebutton"
         mat-mini-fab
         *ngIf="watchListApi"
-        (click)="deleteTrack()"
+        (click)="deleteTrack(track)"
         matTooltip="Delete from WishList"
     >
         <i class="material-icons"> delete </i>
@@ -46,7 +46,7 @@
         class="update"
         mat-mini-fab
         *ngIf="watchListApi"
-        (click)="updateTrack()"
+        (click)="addComments('update')"
         matTooltip="update track"
       >
         <i class="fas fa-pen"></i>

@@ -1,11 +1,7 @@
-<section class="track-container"
-fxLayout
-fxLayout.sm="column"
-fxLayoutAlign="center"
->
-    <app-card *ngFor="let track of tracks"
-    [track]="track"
-    (trackDeleteEvent)='deleteTrack($event)'
-    (trackUpdateEvent)='updateTrack($event)'
-    ></app-card>
-</section>
+<div class='container' >
+    <app-card *ngFor='let track of tracks'
+    [track]='track'
+    [watchListApi]='watchListApi'
+    (deleteFromWishlist)="deleteFromWishlist($event)"
+    (updateComments)='updateComments($event)'></app-card>
+</div>
